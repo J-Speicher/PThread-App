@@ -1,5 +1,5 @@
 /*
- * par_sum.c
+ * sum.c
  *
  * CS 470 Project 1 (Pthreads)
  * Serial version
@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <time.h>
 
 // aggregate variables
 volatile long sum = 0;
@@ -32,9 +31,6 @@ pthread_mutex_t done_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // condition variable to signal when queue is not empty
 pthread_cond_t queue_cond = PTHREAD_COND_INITIALIZER;
-
-// timing variables for benchmarking
-struct timespec start_time, end_time;
 
 // function prototypes
 void update(long number);
@@ -169,9 +165,6 @@ void *thread_func(void *arg)
 
 int main(int argc, char* argv[])
 {
-    // Record start time
-    //clock_gettime(CLOCK_MONOTONIC, &start_time); ==============================================================================
-
     // check and parse command line options
     if (argc < 3) {
         printf("Usage: sum <infile>\n");
@@ -244,16 +237,6 @@ int main(int argc, char* argv[])
     
     // print results
     printf("%ld %ld %ld %ld\n", sum, odd, min, max);
-
-    // Record end time ==========================================================================================================
-    // could not use CLOCK_REALTIME because it did not work with the gcc compiler provided in the Makefile  ----- ask aobut this
-    // clock_gettime(CLOCK_MONOTONIC, &end_time);
-
-    // // Calculate elapsed time
-    // double elapsed_seconds = (end_time.tv_sec - start_time.tv_sec) + (end_time.tv_nsec - start_time.tv_nsec) / 1000000000.0;
-
-    // // Print elapsed time
-    // printf("Wall time: %f seconds\n", elapsed_seconds); =======================================================================
     
     // clean up and return
     return (EXIT_SUCCESS);
